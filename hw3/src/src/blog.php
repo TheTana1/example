@@ -42,7 +42,7 @@ function readAllPosts(): string
     }
 
     if (filesize($filename) == 0) {
-        return "Нет постов для отображения.";
+        return handleError("Нет постов для отображения.");
     }
 
     $file = fopen($filename,'r');
@@ -110,7 +110,7 @@ function clearPosts(): string
 
     $file=fopen($filename,'w');
     if(!$file){
-        handleError("Error: Невозможно очистить файл");
+        return handleError("Error: Невозможно очистить файл");
     }
 
     fclose($file);
@@ -122,7 +122,7 @@ function searchPost(): string
     $filename = 'db.txt';
     //TODO необязательно, реализовать поиск по заголовку (можно и по всему телу), поисковый запрос через readline
     
-    $text = readline("Введите текст для поиска: ");
+    $text = trim(readline("Введите текст для поиска: "));
     $file = fopen($filename, 'r');
     if(!$file){
         return  handleError("Error: Невозможно открыть файл для чтения");

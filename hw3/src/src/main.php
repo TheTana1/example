@@ -24,7 +24,7 @@ function parseCommand(): string
         'search-post' => 'searchPost',
     ];
 
-    $functionName = $commands[$_SERVER['argv'][1]] ?? 'handleHelp';
+    $functionName = $commands[$_SERVER['argv'][1] ?? 'help'];
 
     return $functionName;
 }

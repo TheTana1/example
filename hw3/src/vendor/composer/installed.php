@@ -3,7 +3,7 @@
         'name' => 'theta/src',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '11e157ec034abd7286eb591c90331925c38e97a2',
+        'reference' => 'd1a74068fc33f37758ed188a7128a4f3694fc9e6',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'theta/src' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '11e157ec034abd7286eb591c90331925c38e97a2',
+            'reference' => 'd1a74068fc33f37758ed188a7128a4f3694fc9e6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
