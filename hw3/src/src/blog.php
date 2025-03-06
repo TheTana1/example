@@ -84,8 +84,9 @@ function readPost(): string
     }
    
     for($i = 0; $i < $postNumber-1; $i++){
+       
         fgets($file);
-
+        
         if(feof($file))
         {
             return handleError("Выход за пределы количества постов");
@@ -93,13 +94,13 @@ function readPost(): string
     }
 
     $post = fgets($file);
-    echo $post . "\n";
+    echo $post . PHP_EOL;
 
     fclose($file);
     return "!   Успешно   !";
 }
 
-function clearPosts(): string
+function clearAllPosts(): string
 {
      //TODO стереть все посты
 
@@ -115,6 +116,52 @@ function clearPosts(): string
 
     fclose($file);
     return "!   Все посты удалены   !";
+}
+
+function clearPost(): string
+{
+    //TODO стереть пост по id
+    if(!isset($_SERVER['argv'][2])){
+        return handleError("Error: Не указан номер поста");
+    }
+    $postNumber = $_SERVER['argv'][2];
+
+    $filename = 'db.txt';
+    if(!file_exists($filename)){
+        return handleError("Error: Постов не существует добавьте посты ");
+    }
+    $file=fopen($filename,'r');
+    $fileTmp= fopen('dbTmp.txt', 'w');
+    if(!$file){
+        return handleError("Error: Невозможно открыть файл");
+    }
+    if(!$fileTmp){
+        return handleError("Error: Невозможно открыть файл для перезаписи");
+    }
+
+    //перезапись в резервный файл
+    for ($i=0; $i < $postNumber-1; $i++) { 
+        if(feof($file)){
+            return handleError("Выход за пределы количества постов");
+        }
+        fwrite($fileTmp,fgets($file));
+    }
+    fgets($file);
+    while(!feof($file))
+    {
+        fwrite($fileTmp,fgets($file));
+    }
+
+    fclose($file);
+    fclose($fileTmp);
+
+    //удаление оригинала, переименование копии
+    if(!unlink($filename))
+    {
+        return handleError('Error: При удалении исходного файла произошла ошибка');
+    }
+    rename('dbTmp.txt', $filename);
+    return '!   Успешно    !';
 }
 
 function searchPost(): string

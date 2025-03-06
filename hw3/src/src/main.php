@@ -15,16 +15,16 @@ function main(): string
 
 function parseCommand(): string
 {
-    $commands = [
+    $functionName = $_SERVER['argv'][1] ?? 'help';
+
+    return match($functionName){
         'help' => 'handleHelp',
         'add-post' => 'addPost',
         'read-all-posts' => 'readAllPosts',
         'read-post' => 'readPost',
-        'clear-posts' => 'clearPosts',
+        'clear-all-posts' => 'clearAllPosts',
         'search-post' => 'searchPost',
-    ];
-
-    $functionName = $commands[$_SERVER['argv'][1] ?? 'help'];
-
-    return $functionName;
+        'clear-post' => 'clearPost',
+        default => 'handleHelp'
+    };
 }
