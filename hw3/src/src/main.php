@@ -7,7 +7,7 @@ function main(): string
     if (function_exists($command)){
         $result = $command();
     } else{
-        $result = handleError("нет такой функции");
+        $result = handleError("Error: Нет такой функции");
     }
 
     return $result;

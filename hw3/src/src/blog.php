@@ -10,7 +10,7 @@ function addPost(): string
     // в случае успеха вернуть текст что пост добавлен
     $title = readline("Введите заголовок ");
     $content = readline("Введите текст поста ");
-    $filename = 'db.txt';
+    $filename = db_ini['db_file'];
     if (empty($title)) {
 
         if(empty($content)){
@@ -30,13 +30,15 @@ function addPost(): string
     fwrite($file,$post);
 
     fclose($file);
-    return "\n!   Пост добавлен   !";
+    
+    return "\n!   Пост добавлен в блог " . db_ini['db_name'] . "   !";
 }
 
 function readAllPosts(): string
 {
     //TODO реализовать чтение всех постов но вывести только заголовки
-    $filename = 'db.txt';
+    $filename = db_ini['db_file'];
+
     if(!file_exists( $filename)){
         return handleError("Error: файл не существует");
     }
@@ -66,7 +68,7 @@ function readPost(): string
 {
     //TODO реализовать чтение одного поста, номер поста считывай из командной строки
 
-    $filename = 'db.txt';
+    $filename = db_ini['db_file'];
 
     if(!isset($_SERVER['argv'][2])){
         return handleError("Error: Не указан номер поста");
@@ -104,7 +106,8 @@ function clearAllPosts(): string
 {
      //TODO стереть все посты
 
-    $filename = 'db.txt';
+    $filename = db_ini['db_file'];
+    
     if(!file_exists($filename)){
         return handleError("Error: Постов не существует добавьте посты ");
     }
@@ -115,7 +118,7 @@ function clearAllPosts(): string
     }
 
     fclose($file);
-    return "!   Все посты удалены   !";
+    return "!   Все посты удалены из блога " . db_ini['db_name'] . "   !";
 }
 
 function clearPost(): string
@@ -126,7 +129,7 @@ function clearPost(): string
     }
     $postNumber = $_SERVER['argv'][2];
 
-    $filename = 'db.txt';
+    $filename = db_ini['db_file'];
     if(!file_exists($filename)){
         return handleError("Error: Постов не существует добавьте посты ");
     }
@@ -161,12 +164,12 @@ function clearPost(): string
         return handleError('Error: При удалении исходного файла произошла ошибка');
     }
     rename('dbTmp.txt', $filename);
-    return '!   Успешно    !';
+    return "!   Пост удалён из блога " . db_ini['db_name'] . "   !";
 }
 
 function searchPost(): string
 {
-    $filename = 'db.txt';
+    $filename = db_ini['db_file'];
     //TODO необязательно, реализовать поиск по заголовку (можно и по всему телу), поисковый запрос через readline
     
     $text = trim(readline("Введите текст для поиска: "));
