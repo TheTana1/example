@@ -9,26 +9,24 @@ function addPost(): string
     // разделить точкой с запятой
     // в случае успеха вернуть текст что пост добавлен
     $title = readline("Введите заголовок ");
-    $content = readline("Введите текст поста ");
-    $filename = db_ini['db_file'];
     if (empty($title)) {
-
-        if(empty($content)){
-            return handleError("Error: Введите текст поста");
-        }
-
         return handleError("Error: Введите заголовок поста");
     }
 
-    $file= fopen($filename,'a');
+    $content = readline("Введите текст поста ");
+    if(empty($content)){
+        return handleError("Error: Введите текст поста");
+    }
 
-    if(!$file){
+    $filename = db_ini['db_file'];
+
+    $file= fopen($filename,'a');
+    if(!is_writable($filename)){
         return handleError("Error: файл не открыт для записи");
     }
 
     $post = $title . "; " . $content .  "\n";
     fwrite($file,$post);
-
     fclose($file);
     
     return "\n!   Пост добавлен в блог " . db_ini['db_name'] . "   !";
@@ -40,17 +38,18 @@ function readAllPosts(): string
     $filename = db_ini['db_file'];
 
     if(!file_exists( $filename)){
-        return handleError("Error: файл не существует");
+        return handleError("Error: блог не существует");
     }
 
-    if (filesize($filename) == 0) {
+    if (filesize($filename) === 0) {
         return handleError("Нет постов для отображения.");
     }
 
     $file = fopen($filename,'r');
-    if(!$file){
-        return  handleError("Error: Ошибка открытия файла");
+    if(stream_get_meta_data($file)['mode'] !== 'r'){
+        return  handleError("Error: Ошибка открытия блога");
     }
+
     while(!feof($file)){
         $str = fgets($file);
         $titlePost = strtok($str, ";");
@@ -80,15 +79,14 @@ function readPost(): string
         return handleError("Error: Файл не существует");
     }
 
-    $file = fopen($filename, 'r');
-    if(!$file){
-        return  handleError("Error: Невозможно открыть файл для чтения");
+    $file = fopen($filename,'r');
+    if(stream_get_meta_data($file)['mode'] !== 'r'){
+        return  handleError("Error: Ошибка открытия блога");
     }
-   
+
     for($i = 0; $i < $postNumber-1; $i++){
        
         fgets($file);
-        
         if(feof($file))
         {
             return handleError("Выход за пределы количества постов");
@@ -113,8 +111,8 @@ function clearAllPosts(): string
     }
 
     $file=fopen($filename,'w');
-    if(!$file){
-        return handleError("Error: Невозможно очистить файл");
+    if(!is_writable($filename)){
+        return handleError("Error: файл не открыт для записи");
     }
 
     fclose($file);
@@ -133,15 +131,16 @@ function clearPost(): string
     if(!file_exists($filename)){
         return handleError("Error: Постов не существует добавьте посты ");
     }
+
     $file=fopen($filename,'r');
     $fileTmp= fopen('dbTmp.txt', 'w');
-    if(!$file){
-        return handleError("Error: Невозможно открыть файл");
+    
+    if(stream_get_meta_data($file)['mode'] !== 'r'){
+        return  handleError("Error: Ошибка открытия блога");
     }
-    if(!$fileTmp){
-        return handleError("Error: Невозможно открыть файл для перезаписи");
+    if(!is_writable("dbTmp.txt")){
+        return handleError("Error: файл не открыт для записи");
     }
-
     //перезапись в резервный файл
     for ($i=0; $i < $postNumber-1; $i++) { 
         if(feof($file)){
@@ -174,9 +173,10 @@ function searchPost(): string
     
     $text = trim(readline("Введите текст для поиска: "));
     $file = fopen($filename, 'r');
-    if(!$file){
-        return  handleError("Error: Невозможно открыть файл для чтения");
+    if(stream_get_meta_data($file)['mode'] !== 'r'){
+        return  handleError("Error: Ошибка открытия блога");
     }
+
     while(!feof($file)){
         $str = fgets($file);
         $titlePost = explode(";", $str);

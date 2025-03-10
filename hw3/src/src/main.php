@@ -25,6 +25,5 @@ function parseCommand(): string
         'clear-all-posts' => 'clearAllPosts',
         'search-post' => 'searchPost',
         'clear-post' => 'clearPost',
-        default => 'handleHelp'
     };
 }

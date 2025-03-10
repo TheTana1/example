@@ -1,6 +1,7 @@
 .idea/
-vendor/
-composer.phar
-composer.bat
+/vendor
+/composer.phar
+/composer.bat
 db.txt
+
 
