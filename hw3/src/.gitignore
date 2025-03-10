@@ -2,6 +2,6 @@
 /vendor
 /composer.phar
 /composer.bat
-db.txt
+/db.txt
 
 

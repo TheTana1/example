@@ -116,7 +116,7 @@ function clearAllPosts(): string
     }
 
     fclose($file);
-    return "!   Все посты удалены из блога " . db_ini['db_name'] . "   !";
+    return "\n" . "!   Все посты удалены из блога " . db_ini['db_name'] . "   !";
 }
 
 function clearPost(): string
